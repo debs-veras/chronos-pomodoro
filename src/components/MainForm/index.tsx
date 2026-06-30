@@ -7,19 +7,20 @@ import type { TaskModel } from "../../types/taskModel.d";
 import { useTaskContext } from "../../contexts/TaskContext/useTaskContext";
 import { getNextCycle } from "../../util/getNextCycle";
 import { getNextCycleType } from "../../util/gettNextCycleType";
-import { formatSecondsToMinutes } from "../../util/formatSecondsToMinutes";
+import { TaskActionTypes } from "../../contexts/TaskContext/taskActions";
+import { Tips } from "../Tips/index.";
 
 export function MainForm() {
   const [taskName, setTaskName] = useState("");
-  const { state, setState } = useTaskContext();
+  const { state, dispatch } = useTaskContext();
+
 
   //Ciclos
   const nextCycle = getNextCycle(state.currentCycle);
-  const nextCycleType = getNextCycleType(state.currentCycle);
+  const nextCycleType = getNextCycleType(nextCycle);
 
   function handleCreateNewTask(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    console.log('entrar')
     if (taskName === null || !taskName.trim()) return;
 
     const newTask: TaskModel = {
@@ -32,30 +33,11 @@ export function MainForm() {
       type: nextCycleType,
     };
 
-    const secondsRemaining = newTask.durationInMinutes * 60;
-
-    setState((prevState) => {
-      return {
-        ...prevState,
-        config: { ...prevState.config },
-        activeTask: newTask,
-        currentCycle: nextCycle,
-        secondsRemaining,
-        formattedSecondsRemaining: formatSecondsToMinutes(secondsRemaining),
-        tasks: [...prevState.tasks, newTask],
-      };
-    });
+    dispatch({ type: TaskActionTypes.START_TASK, payload: newTask });
   }
 
   function handleInterruptTask() {
-    setState((prevState) => {
-      return {
-        ...prevState,
-        activeTask: null,
-        secondsRemaining: 0,
-        formattedSecondsRemaining: "00:00",
-      };
-    });
+    dispatch({ type: TaskActionTypes.INTERRUPT_TASK });
   }
 
   return (
@@ -73,7 +55,7 @@ export function MainForm() {
       </div>
 
       <div className="formRow">
-        <p>Próximo intervalo é de 25min</p>
+        <Tips />
       </div>
 
       {state.currentCycle > 0 && (
