@@ -5,8 +5,8 @@ import { DefaultInput } from "../DefaultInput";
 import { useState } from "react";
 import type { TaskModel } from "../../types/taskModel.d";
 import { useTaskContext } from "../../contexts/TaskContext/useTaskContext";
-import { getNextCycle } from "../../util/getNextCycle";
-import { getNextCycleType } from "../../util/gettNextCycleType";
+import { getNextCycle } from "../../utils/getNextCycle";
+import { getNextCycleType } from "../../utils/gettNextCycleType";
 import { TaskActionTypes } from "../../contexts/TaskContext/taskActions";
 import { Tips } from "../Tips/index.";
 
