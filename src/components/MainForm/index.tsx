@@ -9,7 +9,7 @@ import { getNextCycle } from "../../utils/getNextCycle";
 import { getNextCycleType } from "../../utils/gettNextCycleType";
 import { TaskActionTypes } from "../../contexts/TaskContext/taskActions";
 import { Tips } from "../Tips/index.";
-import { toast } from "react-toastify";
+import { showMessage } from "../../adapters/showMessage";
 
 export function MainForm() {
   const [taskName, setTaskName] = useState("");
@@ -23,7 +23,7 @@ export function MainForm() {
     event.preventDefault();
 
     if (taskName === null || !taskName.trim()) {
-      toast.info("Por favor, insira o nome da tarefa antes de iniciar.");
+      showMessage.warn("Por favor, insira o nome da tarefa antes de iniciar.");
       return;
     }
 
@@ -38,6 +38,7 @@ export function MainForm() {
     };
 
     dispatch({ type: TaskActionTypes.START_TASK, payload: newTask });
+    showMessage.success(`Tarefa "${taskName}" iniciada com sucesso!`);
   }
 
   function handleInterruptTask() {
