@@ -9,11 +9,11 @@ import { getNextCycle } from "../../utils/getNextCycle";
 import { getNextCycleType } from "../../utils/gettNextCycleType";
 import { TaskActionTypes } from "../../contexts/TaskContext/taskActions";
 import { Tips } from "../Tips/index.";
+import { toast } from "react-toastify";
 
 export function MainForm() {
   const [taskName, setTaskName] = useState("");
   const { state, dispatch } = useTaskContext();
-
 
   //Ciclos
   const nextCycle = getNextCycle(state.currentCycle);
@@ -21,7 +21,11 @@ export function MainForm() {
 
   function handleCreateNewTask(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    if (taskName === null || !taskName.trim()) return;
+
+    if (taskName === null || !taskName.trim()) {
+      toast.info("Por favor, insira o nome da tarefa antes de iniciar.");
+      return;
+    }
 
     const newTask: TaskModel = {
       id: Date.now().toString(),
